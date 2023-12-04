@@ -9,4 +9,5 @@
 
 # Applications
 *.o
+*.out
 
