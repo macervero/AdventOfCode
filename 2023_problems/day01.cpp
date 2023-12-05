@@ -58,9 +58,10 @@ int problem02Solver(std::string filename) {
 
     if(!ifile.is_open()) return -1;
     else {
+        int curline = 0;
         while(!ifile.eof()) {
             ifile >> line;
-            
+
             maxpos = -1;
             minpos = line.size();
             for(int i=0; i<capacity; i++) {
@@ -77,8 +78,8 @@ int problem02Solver(std::string filename) {
                 }
             }
 
-            if(maxpos != -1) line.replace(maxpos, patterns_text[maxval].size(), numbers[maxval]);
-            if(minpos != line.size()) line.replace(minpos, patterns_text[minval].size(), numbers[minval]);
+            if(maxpos != -1 || maxpos == minpos) line = line.substr(0, maxpos) + numbers[maxval] + line.substr(maxpos, line.size()-maxpos);
+            if(minpos != line.size() && maxpos != minpos) line = line.substr(0, minpos) + numbers[minval] + line.substr(minpos, line.size()-minpos);
 
             sum += getCallibrationValue(line);
         }
