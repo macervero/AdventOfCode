@@ -12,22 +12,40 @@ const int RED_CUBES = 12;
 const int GREEN_CUBES = 13;
 const int BLUE_CUBES = 14;
 
+const std::string DATA_FOLDER = "data/";
+const std::string INPUT_FILE = "input_day02.txt";
+const std::string TEST_FILE = "test_day02.txt";
+
 int main(int argc, char** argv) {
     std::string filename;
     bool executeBoth = false;
     int sum;
 
-    if(argc == 1) executeBoth = true;
+    if(argc == 1 ||
+        (argc == 2 && (*argv[1] != 't' && *argv[1] != 'i')) ||
+        (argc == 3 && ((*argv[1] != 't' && *argv[1] != 'i') || (*argv[2] != '1' && *argv[2] != '2'))) ||
+        argc > 3) {
+        std::cout << "This program must be executed as follows:\n"
+                        "\t\t./day02.out FILE_TYPE [PROBLEM]\n\n"
+                        "FILE_TYPE: t (for testing); i (for real input)\n"
+                        "PROBLEM: 1 (for problem 1); 2 (for problem 2); nothing for both problems at the same time" << std::endl;
+        return 0;
+    }
 
-    if(executeBoth || *argv[1] == '1') {
-        filename = "input1_day02.txt";
+    if(argc == 2) executeBoth = true;
+    if(executeBoth || *argv[2] == '1') {
+        if(*argv[1] == 't') filename = DATA_FOLDER + TEST_FILE;
+        else filename = DATA_FOLDER + INPUT_FILE;
+
         sum = problem01Solver(filename);
         if(sum == -1) std::cerr << filename << " can not be opened" << std::endl;
         else std::cout << sum << std::endl;
     }
 
-    if(executeBoth || *argv[1] == '2') {
-        filename = "input2_day02.txt";
+    if(executeBoth || *argv[2] == '2') {
+        if(*argv[1] == 't') filename = DATA_FOLDER + TEST_FILE;
+        else filename = DATA_FOLDER + INPUT_FILE;
+
         sum = problem02Solver(filename);
         if(sum == -1) std::cerr << filename << " can not be opened" << std::endl;
         else std::cout << sum << std::endl;
