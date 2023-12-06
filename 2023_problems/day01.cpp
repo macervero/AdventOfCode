@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <regex>
 
 int problem01Solver(std::string filename);
 int problem02Solver(std::string filename);
