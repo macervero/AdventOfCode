@@ -10,6 +10,9 @@ day02:
 day03:
 	g++ day03.cpp -o day03.out
 
+day04:
+	g++ day04.cpp -o day04.out
+
 # CLEAR BUILDS
 clean:
 	rm *.out
