@@ -106,6 +106,88 @@ int problem01Solver(std::string filename) {
 }
 
 int problem02Solver(std::string filename) {
-    int sum = 0;
+    std::string line, subline;
+    std::ifstream ifile(filename);
+    std::vector<std::string> lines;
+    std::vector<std::vector<int>> nums;
+    std::vector<int> neighNums;
+    std::regex numRegex("(\\d+)");
+    std::regex_iterator<std::string::iterator> erit;
+    int sum = 0, num, pos, length, ipos, epos;
+
+    if(!ifile.is_open()) return -1;
+    else {
+        while(std::getline(ifile, line)) {
+            lines.push_back(line);
+            nums.push_back(std::vector<int>());
+            nums[nums.size() - 1].push_back(0);
+        }
+
+        for(unsigned int i=0; i<lines.size(); i++) {
+            std::regex_iterator<std::string::iterator> rit (lines[i].begin(), lines[i].end(), numRegex);
+
+            while (rit != erit) {
+                num = std::stoi(rit->str(1));
+                pos = rit->position(1);
+                length = rit->length(1);
+                nums[i][0]++;
+                nums[i].push_back(num);
+                nums[i].push_back(pos);
+                nums[i].push_back(length);
+
+                rit++;
+            }
+        }
+
+        for(unsigned int i=0; i<lines.size(); i++) {
+            pos = lines[i].find('*');
+
+            while(pos != std::string::npos) {
+                neighNums.clear();
+
+                if(i-1 >= 0) {
+                    for(unsigned int j=0; j<nums[i-1][0]; j++) {
+                        ipos = nums[i-1][(j * 3) + 2];
+                        epos = ipos + nums[i-1][(j * 3) + 3] - 1;
+
+                        if(epos == pos - 1
+                            || (ipos <= pos && epos >= pos)
+                            || ipos == pos + 1) {
+                            neighNums.push_back(nums[i-1][(j * 3) + 1]);
+                        }
+                    }
+                }
+
+                for(unsigned int j=0; j<nums[i][0]; j++) {
+                    ipos = nums[i][(j * 3) + 2];
+                    epos = ipos + nums[i][(j * 3) + 3] - 1;
+
+                    if(epos == pos - 1 || ipos == pos + 1) {
+                        neighNums.push_back(nums[i][(j * 3) + 1]);
+                    }
+                }
+
+                if(i+1 < lines[i].length()) {
+                    for(unsigned int j=0; j<nums[i+1][0]; j++) {
+                        ipos = nums[i+1][(j * 3) + 2];
+                        epos = ipos + nums[i+1][(j * 3) + 3] - 1;
+
+                        if(epos == pos - 1
+                            || (ipos <= pos && epos >= pos)
+                            || ipos == pos + 1) {
+                            neighNums.push_back(nums[i+1][(j * 3) + 1]);
+                        }
+                    }
+                }
+
+                if(neighNums.size() == 2) {
+                    sum += neighNums[0] * neighNums[1];
+                }
+
+                pos = lines[i].find('*', pos+1);
+            }
+        }
+    }
+
     return sum;
 }
